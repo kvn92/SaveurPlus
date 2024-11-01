@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategorieController!{% endblock %}
+
+{% block body %}
+
+
+
+<div class="container mt-5">
+<div>
+  <a href="{{ path('categorie.index') }}" class="btn btn-primary mb-3">Retour</a>
+</div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Gestion des Pays</h1>
+            
+            <div class="card shadow-sm p-4">
+                {{ form_start(form) }}
+                
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
