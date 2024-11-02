@@ -12,24 +12,33 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
-#[Route('/pays', name: '')]
+#[Route('/pays', name: 'pays.')]
 
 class PaysController extends AbstractController
 {
-    #[Route('', name: 'pays.index')]
+    #[Route('', name: 'index')]
     public function index(PaysRepository $paysRepository): Response
     {
+        
+        $totalPays = $paysRepository->count();
+        $activePays = $paysRepository->count(['isActive'=>true]);
+        $inactivePays = $paysRepository->count(['isActive'=>false]);
         $pays = $paysRepository->findAll();
         return $this->render('pays/index.html.twig', [
+            'title'=>'Pays',
+            'totalPays'=>$totalPays,
+            'activePays'=>$activePays,
+            'inactivePays'=>$inactivePays,
             'pays' => $pays
         ]);
     }
 
-    #[Route('/new', name:'pays.new',methods:['POST','GET'])]
+    #[Route('/new', name:'new',methods:['POST','GET'])]
     public function new(Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
         $pays = new Pays;
-        $form = $this->createForm(PaysType::class, $pays);
+        $form = $this->createForm(PaysType::class, $pays,
+    ['is_edit'=>true]);
 
         $form->handleRequest($request);
         
@@ -40,13 +49,13 @@ class PaysController extends AbstractController
             return $this->redirectToRoute('pays.index');
         }
 
-        return $this->render('pays/new.html.twig', [
-            'pays' => $pays
+        return $this->render('pays/new.html.twig', ['title'=>'Pays',
+            'pays' => $pays,'form'=>$form->createView()
         ]);
     }
 
-    #[Route('/{id}.edit', name: 'edit')]
-    public function upadter(Request $request,EntityManagerInterface $entityManagerInterface,Pays $pays): Response
+    #[Route('/{id}/edit', name: 'edit',methods:['POST','GET'],requirements:['id'=>Requirement::DIGITS])]
+    public function update(Request $request,EntityManagerInterface $entityManagerInterface,Pays $pays): Response
     {
         $form = $this->createForm(PaysType::class, $pays);
 
@@ -56,9 +65,10 @@ class PaysController extends AbstractController
             $entityManagerInterface->persist($pays);
             $entityManagerInterface->flush();
             $this->addFlash('success','ajoute');
+            return $this->redirectToRoute('pays.index');
         }
-        return $this->render('pays/index.html.twig', [
-            'pays' => $pays
+        return $this->render('pays/update.html.twig', ['title'=>'Pays',
+            'pays' => $pays,'form'=>$form
         ]);
     }
 

@@ -22,7 +22,7 @@ class Commentaire
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Length(
-        min:10,
+        min:2,
         max:100,
         minMessage:'Minimun 10 caractères',
         maxMessage:'Maximun 100 caractères')]
@@ -31,9 +31,12 @@ class Commentaire
     private ?string $commentaire = null;
 
     #[ORM\Column]
-    #[Assert\DateTime(format:'H:i:s d-m-Y')]
     
     private ?\DateTimeImmutable $createAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $users = null;
 
     public function getId(): ?int
     {
@@ -64,6 +67,18 @@ class Commentaire
     public function setCreateAt(\DateTimeImmutable $createAt): static
     {
         $this->createAt = $createAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUser(?User $users): static
+    {
+        $this->users = $users;
 
         return $this;
     }

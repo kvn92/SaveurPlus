@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategorieController!{% endblock %}
+
+{% block body %}
+
+
+
+<div class="container">
+
+<div class="text-start mb-3">
+  <a href="{{ path('commentaire.new')}}" class="btn btn-primary" >Ajoute</a>
+</div>
+
+<table class="table table-striped" >
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Commentaire</th>
+      <th scope="col">email</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for commentaire in commentaires %}
+
+    <tr>
+        
+   
+      <th scope="row">1</th>
+      
+      <td>{{ commentaire.id }}</td>
+      <td>{{ commentaire.commentaire}}</td>
+
+      <td class="d-flex gap-2">
+
+      <a href"#" class="btn btn-warning">Modifier</a>
+      <a href"#" class="btn btn-warning">Modifier</a>
+    
+      </td>
+    </tr>
+     {% endfor %}
+    
+  </tbody>
+</table>
+</div>
+{% endblock %}

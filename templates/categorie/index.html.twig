@@ -1,51 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategorieController!{% endblock %}
+{% block title %}Gestion des  {{ titles  | capitalize}}{% endblock %}
 
 {% block body %}
 
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0">Statistiques des {{ titles  | capitalize}}</h3>
+    <a href="{{ path('categorie.new') }}" class="btn btn-primary btn-lg">
+      <i class="fas fa-plus"></i> Ajouter une {{title }}
+    </a>
+  </div>
 
+  <div class="d-flex flex-wrap gap-4 mb-4">
+    <div class="alert alert-primary" role="alert">
+      Nombre total de catégories : <strong>{{ totalCategories }}</strong>
+    </div>
+    <div class="alert alert-success" role="alert">
+      Catégories actives : <strong>{{ activeCategories }}</strong>
+    </div>
+    <div class="alert alert-danger" role="alert">
+      Catégories inactives : <strong>{{ inactiveCategories }}</strong>
+    </div>
+  </div>
 
-<div class="container">
-
-<div class="text-start mb-3">
-  <a href="{{ path('categorie.new')}}" class="btn btn-primary" >Ajoute</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">{{ title | capitalize }}</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for categorie in categories %}
+        <tr>
+          <th scope="row">{{ loop.index }}</th>
+          <td>{{ categorie.Categorie | capitalize  }}</td>
+          <td>
+            {% if categorie.isActive %}
+              <span class="text-success"> Actif </span>
+            {% else %}
+              <span class="text-danger"> Inactif </span>
+            {% endif %}
+          </td>
+          <td class="d-flex gap-2">
+            <a href="{{ path('categorie.edit', { id : categorie.id }) }}" class="btn btn-warning">Modifier</a>
+            <form action="{{ path('categorie.delete', {id: categorie.id}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">
+                            <input type="hidden" name="_method" value="delete" /> 
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ categorie.id) }}" /> 
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
-<table class="table table-striped" >
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Categorie</th>
-      <th scope="col">Status</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      
-      <td>Mark</td>
-      <td>Otto</td>
-      <td class="d-flex gap-2">
-
-      <a href"#" class="btn btn-warning">Modifier</a>
-      <a href"#" class="btn btn-warning">Modifier</a>
-    
-      </td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td class="">Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
-</div>
 {% endblock %}

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PaysRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PaysRepository::class)]
@@ -15,12 +16,11 @@ class Pays
     private ?int $id = null;
 
 
-    #[ORM\Column(type:'string',length: 30)]
+    #[ORM\Column(length: 30)]
     #[Assert\NotBlank]
     private ?string $pays = null;
 
-    #[ORM\Column(type:'boolean')]
-    #[Assert\NotBlank]
+    #[ORM\Column()]
     private ?bool $isActive = null;
 
     public function getId(): ?int
@@ -35,7 +35,7 @@ class Pays
 
     public function setPays(string $pays): static
     {
-        $this->pays = $pays;
+        $this->pays = strtolower($pays) ;
 
         return $this;
     }
@@ -45,7 +45,7 @@ class Pays
         return $this->isActive;
     }
 
-    public function setActive(bool $isActive): static
+    public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
 

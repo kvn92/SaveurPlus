@@ -19,10 +19,15 @@ class PaysType extends AbstractType
                 'label'=>'Pays',
                 'required'=>false
                 ])
-            ->add('isActive',ChoiceType::class,['choices'=>[
-                'Active'=>true,
-                'Desactive'=>false
-                ]])
+                ->add('isActive', ChoiceType::class, [
+                    'label' => 'Afficher',
+                    'choices' => [
+                        'Active' => true,
+                        'Désactiver' => false
+                    ],
+                    'expanded' => true,  // Affiche les choix sous forme de boutons radio
+                    'multiple' => false,  // Choix unique
+                ])
             ->add('submit',SubmitType::class,[
                 'label'=>$options['is_edit']?'Ajouter':'Modifier'])
         ;

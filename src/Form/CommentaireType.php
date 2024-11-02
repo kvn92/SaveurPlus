@@ -7,6 +7,7 @@ use App\Entity\Recette;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,19 +17,13 @@ class CommentaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('createAt', null, [
-                'widget' => 'single_text'
-            ])
+
             ->add('commentaire',TextareaType::class,['label'=>'Commentaire',
                 'required'=>false])
-            ->add('recette', EntityType::class, [
-                'class' => Recette::class,
-'choice_label' => 'id',
-            ])
-            ->add('users', EntityType::class, [
-                'class' => User::class,
-'choice_label' => 'id',
-            ])
+
+ 
+            ->add('submit',SubmitType::class,[
+                'label'=>$options['is_edit']?'Ajouter':'Modifier'])
         ;
     }
 
@@ -36,6 +31,7 @@ class CommentaireType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Commentaire::class,
+            'is_edit'=>false
         ]);
     }
 }
