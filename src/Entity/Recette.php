@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RecetteRepository::class)]
 class Recette
@@ -16,58 +17,43 @@ class Recette
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'recettes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $users = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank]
     private ?string $nomRecette = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank]
     private ?string $descriptionRecette = null;
 
     #[ORM\Column(length: 255)]
     private ?string $thumbnailRecette = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'boolean')]
     private ?bool $isActive = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createAt = null;
 
-    /**
-     * @var Collection<int, Commentaire>
-     */
-    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'recette')]
-    private Collection $commentaire;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $Duree = null;
 
     #[ORM\ManyToOne]
     private ?Pays $pays = null;
 
-    public function __construct()
-    {
-        $this->commentaire = new ArrayCollection();
-    }
+    #[ORM\ManyToOne]
+    private ?Categorie $categorie = null;
+
+   
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUsers(): ?User
-    {
-        return $this->users;
-    }
 
-    public function setUsers(?User $users): static
-    {
-        $this->users = $users;
-
-        return $this;
-    }
 
     public function getNomRecette(): ?string
     {
@@ -77,7 +63,6 @@ class Recette
     public function setNomRecette(string $nomRecette): static
     {
         $this->nomRecette = $nomRecette;
-
         return $this;
     }
 
@@ -89,7 +74,6 @@ class Recette
     public function setDescriptionRecette(string $descriptionRecette): static
     {
         $this->descriptionRecette = $descriptionRecette;
-
         return $this;
     }
 
@@ -101,7 +85,6 @@ class Recette
     public function setThumbnailRecette(string $thumbnailRecette): static
     {
         $this->thumbnailRecette = $thumbnailRecette;
-
         return $this;
     }
 
@@ -113,7 +96,6 @@ class Recette
     public function setActive(bool $isActive): static
     {
         $this->isActive = $isActive;
-
         return $this;
     }
 
@@ -125,39 +107,10 @@ class Recette
     public function setCreateAt(\DateTimeImmutable $createAt): static
     {
         $this->createAt = $createAt;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Commentaire>
-     */
-    public function getCommentaire(): Collection
-    {
-        return $this->commentaire;
-    }
-
-    public function addCommentaire(Commentaire $commentaire): static
-    {
-        if (!$this->commentaire->contains($commentaire)) {
-            $this->commentaire->add($commentaire);
-            $commentaire->setRecette($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommentaire(Commentaire $commentaire): static
-    {
-        if ($this->commentaire->removeElement($commentaire)) {
-            // set the owning side to null (unless already changed)
-            if ($commentaire->getRecette() === $this) {
-                $commentaire->setRecette(null);
-            }
-        }
-
-        return $this;
-    }
+    
 
     public function getDuree(): ?int
     {
@@ -167,7 +120,6 @@ class Recette
     public function setDuree(int $Duree): static
     {
         $this->Duree = $Duree;
-
         return $this;
     }
 
@@ -179,7 +131,17 @@ class Recette
     public function setPays(?Pays $pays): static
     {
         $this->pays = $pays;
+        return $this;
+    }
 
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): static
+    {
+        $this->categorie = $categorie;
         return $this;
     }
 }

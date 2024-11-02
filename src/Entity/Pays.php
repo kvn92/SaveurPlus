@@ -15,11 +15,12 @@ class Pays
     private ?int $id = null;
 
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(type:'string',length: 30)]
     #[Assert\NotBlank]
     private ?string $pays = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type:'boolean')]
+    #[Assert\NotBlank]
     private ?bool $isActive = null;
 
     public function getId(): ?int
