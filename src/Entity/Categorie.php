@@ -4,15 +4,17 @@ namespace App\Entity;
 
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
+
 class Categorie
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?int $id = null;
 
     #[Assert\NotBlank]
@@ -21,7 +23,7 @@ class Categorie
     private ?string $Categorie = null;
 
 
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?bool $isActive = null;
 
    
@@ -38,7 +40,7 @@ class Categorie
 
     public function setCategorie(string $Categorie): static
     {
-        $this->Categorie = $Categorie;
+        $this->Categorie = strtolower($Categorie);
 
         return $this;
     }
@@ -48,7 +50,7 @@ class Categorie
         return $this->isActive;
     }
 
-    public function setActive(bool $isActive): static
+    public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
 
@@ -57,3 +59,4 @@ class Categorie
 
     
 }
+

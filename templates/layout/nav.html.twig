@@ -1,4 +1,4 @@
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Navbar</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,8 +15,9 @@
             Admin
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ path('categorie.index')}}">Categorie</a></li>
+            <li><a class="dropdown-item" href="{{ path('categorie.index') }}"><i class="bi bi-folder"></i> Categorie</a></li>
             <li><a class="dropdown-item" href="{{ path('pays.index') }}">Pays</a></li>
+            <li><a class="dropdown-item" href="{{ path('commentaire.index') }}">Commentaire</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
@@ -25,10 +26,32 @@
           <a class="nav-link disabled" aria-disabled="true">Disabled</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
+      
+      <form class="d-flex me-3" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
+
+      <ul class="navbar-nav">
+        {% if app.user %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_logout') }}">
+              <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_login') }}">
+              <i class="fas fa-sign-in-alt"></i> Connexion
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_register') }}">
+              <i class="fas fa-user-plus"></i> Inscription
+            </a>
+          </li>
+        {% endif %}
+      </ul>
     </div>
   </div>
 </nav>

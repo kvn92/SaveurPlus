@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CommentaireRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,18 +14,49 @@ class Commentaire
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type:'integer')]
     private ?int $id = null;
 
+ 
+
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\Length(
+        min:2,
+        max:100,
+        minMessage:'Minimun 10 caractères',
+        maxMessage:'Maximun 100 caractères')]
+
+     
+    private ?string $commentaire = null;
+
     #[ORM\Column]
+    
     private ?\DateTimeImmutable $createAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentaire')]
-    private ?Recette $recette = null;
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $users = null;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+
+   
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(string $commentaire): static
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
     }
 
     public function getCreateAt(): ?\DateTimeImmutable
@@ -39,14 +71,14 @@ class Commentaire
         return $this;
     }
 
-    public function getRecette(): ?Recette
+    public function getUser(): ?User
     {
-        return $this->recette;
+        return $this->users;
     }
 
-    public function setRecette(?Recette $recette): static
+    public function setUser(?User $users): static
     {
-        $this->recette = $recette;
+        $this->users = $users;
 
         return $this;
     }
